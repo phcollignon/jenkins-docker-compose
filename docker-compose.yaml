@@ -1,0 +1,25 @@
+# docker-compose.yml
+version: '3.7'
+services:
+  jenkins-master:
+    build: jenkins-master 
+    environment:
+      - DOCKER_HOST=tcp://jenkins-docker:2375
+    ports:
+      - 9090:8080
+      - 50000:50000
+    container_name: jenkins-master
+    volumes:
+      - jenkins-data:/var/jenkins_home
+  jenkins-docker:  
+    privileged: true
+    image: docker:dind
+    ports:
+      - "2375-2375"
+    environment:
+      DOCKER_TLS_CERTDIR:
+    container_name: jenkins-docker
+    volumes:
+      - jenkins-data:/var/jenkins_home
+volumes:
+  jenkins-data:
